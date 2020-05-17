@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&family=Sunflower:wght@300&display=swap"
+    rel="stylesheet">
+
+  <style>
+    .wrap {
+      font-family: 'Sunflower';
+      margin: 10px auto;
+      width: 700px;
+    }
+
+    #proName {
+      font-size: 40px;
+    }
+
+    #price {
+      font-size: 20px;
+      padding-left: 100px
+    }
+
+    img {
+      width: 700px;
+      height: 650px;
+    }
+
+    .rateName {
+      color: blue;
+      font-weight: bold;
+    }
+
+    .table {
+      margin-top: 80px;
+    }
+
+    .btn.btn-primary {
+      margin-left: 300px;
+    }
+  </style>
+
+  <script>
+    $(document).ready(function () {
+      $('#rate').empty();
+      $.ajax({
+        type: "GET",
+        url: "https://api.manana.kr/exchange/rate.json",
+        data: {},
+        success: function (response) {
+          let dollarRate = response[1]['rate'];
+          let tmpl_html = `<span>${dollarRate}</span>`
+          $('#rate').append(tmpl_html);
+        }
+      });
+    })
+
+    function hey() {
+      let phoneNum = $('#order-phone').val();
+      const phoneFormat = /^01([0|1|6|7|8|9]?)-([0-9]{3,4})-([0-9]{4})$/;
+      if ($('#order-name').val() == '') {
+        alert('이름을 입력해주세요');
+      } else if ($('#order-nums').val() == '--수량을 선택하세요--') {
+        alert('수량을 선택해주세요');
+      } else if ($('#order-address').val() == '') {
+        alert('주소를 입력해주세요');
+      } else if (!phoneFormat.test(phoneNum)) {
+        alert('휴대폰 입력 형식이 틀립니다. 010-0000-0000으로 입력해주세요');
+        $('#order-phone').focus();
+      } else {
+        alert('주문이 완료되었습니다!');
+      }
+
+      let temp_html = '';
+      if ($('#order-name').val().length > 1 && $('#order-nums option:selected').val() >= 1 &&
+        $('#order-address').val().length > 1 && phoneFormat.test(phoneNum)) {
+        temp_html += '<tr>';
+        temp_html += '<td>' + $('#order-name').val() + '</td>';
+        temp_html += '<td>' + $('#order-nums').val() + '</td>';
+        temp_html += '<td>' + $('#order-address').val() + '</td>';
+        temp_html += '<td>' + $('#order-phone').val() + '</td>';
+        temp_html += '</tr>';
+        $('#order-table').append(temp_html);
+      }
+    };
+  </script>
+
+  <title>주문페이지</title>
+</head>
+
+<body>
+  <div class="wrap">
+    <img src="스투키.jpg" />
+    <p id="proName">미세먼지는 스투키로 잡으세요!<span id="price">29,900원</span></p>
+    <p>스투키는 공기정화능력이 탁월하고 물 관리가 용이하여 쉽게 키울 수 있습니다. 집, 카페, 사무실 등 실내에 초록색 스투키 화분을 두어 그린 인테리어 효과를 줍니다.</p>
+    <p class="rateName">달러-원 환율 : <span id="rate" class="rateName"></span></p>
+    <div class="input-group input-group-sm mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-sm">주문자 성함</span>
+      </div>
+      <input id="order-name" type="text" class="form-control" aria-label="Small"
+        aria-describedby="inputGroup-sizing-sm" />
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-append">
+        <label class="input-group-text" for="inputGroupSelect02">수량</label>
+      </div>
+      <select id="order-nums" class="custom-select" id="inputGroupSelect02">
+        <option selected>--수량을 선택하세요--</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+      </select>
+    </div>
+
+    <div class="input-group input-group-sm mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-sm">주소</span>
+      </div>
+      <input id="order-address" type="text" class="form-control" aria-label="Small"
+        aria-describedby="inputGroup-sizing-sm">
+    </div>
+
+    <div class="input-group input-group-sm mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroup-sizing-sm">전화번호</span>
+      </div>
+      <input id="order-phone" type="text" class="form-control" aria-label="Small"
+        aria-describedby="inputGroup-sizing-sm">
+    </div>
+    <button onclick="hey()" type="button" class="btn btn-primary">주문하기</button>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">이름</th>
+          <th scope="col">수량</th>
+          <th scope="col">주소</th>
+          <th scope="col">전화번호</th>
+        </tr>
+      </thead>
+      <tbody id="order-table"></tbody>
+    </table>
+  </div>
+</body>
+
+</html>
