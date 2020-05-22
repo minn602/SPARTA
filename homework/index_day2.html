@@ -52,15 +52,16 @@
 
   <script>
     $(document).ready(function () {
-      $('#rate').empty();
+      // $('#rate').empty();
       $.ajax({
         type: "GET",
         url: "https://api.manana.kr/exchange/rate.json",
         data: {},
         success: function (response) {
           let dollarRate = response[1]['rate'];
-          let tmpl_html = `<span>${dollarRate}</span>`
-          $('#rate').append(tmpl_html);
+          let tmpl_html = `${dollarRate}`
+          $('#rate').text(tmpl_html);
+          // $('#rate').append(tmpl_html);
         }
       });
     })
