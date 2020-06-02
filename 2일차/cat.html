@@ -19,15 +19,14 @@
     <script>
       function q1() {
         // 여기에 코드를 입력하세요
-        $('#img-cat').empty();
-        $.ajax({
-            type : "GET",
+        $("#img-cat").empty();
+        $.ajax ({
+            type : "get",
             url : "https://api.thecatapi.com/v1/images/search",
             data : {},
             success : function(response){
-                let imgUrl = response["url"];
-                let tmpl_html = $('#img-cat').attr("scr", imgUrl);
-                $('#img-cat').append(tmpl_html);
+                let pics = response[0]["url"]; //딕셔너리내 몇번째 어떤 키의 value를 얻을 것인지 생각하기
+                $("#img-cat").attr("src",pics); //.attr method를 활용하여 id가 있는 태그내 src 주소를 다른 주소(pics)로 대체
             }
         })
       }
@@ -35,7 +34,7 @@
 
   </head>
   <body>
-    <h1></h1>
+    <h1>JQuery+Ajax의 조합을 연습하자!</h1>
 
     <hr/>
 

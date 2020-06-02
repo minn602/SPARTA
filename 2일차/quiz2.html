@@ -11,50 +11,22 @@
         div.question-box {
             margin: 10px 0 20px 0;
         }
-
-        table {
-            border: 1px solid;
-            border-collapse: collapse;
-        }
-
-        td,
-        th {
-            padding: 10px;
-            border: 1px solid;
-        }
-        .numbers {
-            color : red;
-        }
     </style>
 
     <script>
         function q1() {
             // 여기에 코드를 입력하세요
-            $('#names-q1').empty();
-            $.ajax({
-                type : "GET",
-                url : "http://openapi.seoul.go.kr:8088/6d4d776b466c656533356a4b4b5872/json/bikeList/1/99",
+            let input_num = $("#magicnum").val();
+            if (input_num == '') {
+                alert('숫자를 입력해주세요!');
+            }
+            let result_url = "http://numbersapi.com/" + input_num;
+            $.ajax ({
+                type : "get",
+                url : result_url,
                 data : {},
-                success : function (response) {
-                    let rows = response["rentBikeStatus"]["row"];
-                    for (let i=0; i<rows.length; i++) {
-                        let location = rows[i]['stationName'];
-                        let nums = rows[i]['rackTotCnt'];
-                        let parkNums = rows[i]['parkingBikeTotCnt'];
-
-                        let tmpl_html = ' '
-
-                        if (parkNums < 5) {
-                            tmpl_html = `<tr><td>${location}</td>
-                                             <td >${nums}</td>
-                                             <td class="numbers">${parkNums}</td></tr>`;
-                        } else {
-                            tmpl_html = `<tr><td>${location}</td>
-                                             <td>${nums}</td>
-                                             <td>${parkNums}</td><tr>`;
-                        }
-                        $('#names-q1').append(tmpl_html);
-                    }
+                success : function(response) {
+                    $("#meaning").text(response);
                 }
             })
         }
@@ -63,41 +35,17 @@
 </head>
 
 <body>
-    <h1>jQuery + Ajax의 조합을 연습하자!</h1>
+    <h1>JQuery+Ajax의 조합을 연습하자!</h1>
 
     <hr />
 
     <div class="question-box">
-        <h2>2. 서울시 OpenAPI(실시간 따릉기 현황)를 이용하기</h2>
-        <p>모든 위치의 따릉이 현황을 보여주세요</p>
-        <p>업데이트 버튼을 누를 때마다 지웠다 새로 씌여져야 합니다.</p>
-        <button onclick="q1()">업데이트</button>
-        <table>
-            <thead>
-                <tr>
-                    <td>거치대 위치</td>
-                    <td>거치대 수</td>
-                    <td>현재 거치된 따릉이 수</td>
-                </tr>
-            </thead>
-            <tbody id="names-q1">
-                <tr>
-                    <td>102. 망원역 1번출구 앞</td>
-                    <td>22</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>103. 망원역 2번출구 앞</td>
-                    <td>16</td>
-                    <td>0</td>
-                </tr>
-                <tr>
-                    <td>104. 합정역 1번출구 앞</td>
-                    <td>16</td>
-                    <td>0</td>
-                </tr>
-            </tbody>
-        </table>
+        <h2>4. 랜덤 숫자 의미부여 API를 이용하기</h2>
+        <p>모든 숫자는 어떤 의미가 있습니다. 함께 살펴볼까요?</p>
+        <p>아무것도 입력하지 않으면, alert을 띄워주세요.</p>
+        <input type="number" id="magicnum">
+        <button onclick="q1()">이 숫자의 의미는?</button>
+        <h5 id="meaning"></h5>
     </div>
 </body>
 
